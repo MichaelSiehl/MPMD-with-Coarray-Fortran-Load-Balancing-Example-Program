@@ -1,8 +1,8 @@
 ! This file is part of:
-! MPMD with Coarray Fortran (2008): an Example Program (I)
+! MPMD with Coarray Fortran Load Balancing – Example Program
 ! copyright 2016 by Michael Siehl
 ! www.mpmd-with-coarray-fortran.de
-! http://www.mpmd-with-coarray-fortran.de/MPMD_with_Coarray_Fortran_2008.pdf
+! http://www.mpmd-with-coarray-fortran.de/MPMD_Load_Balancing_example.pdf
 
 MODULE OOOPstpa_admStartPath
 !************************************************
