@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="MPMD_with_Coarray_Fortran" />
+		<Option pch_mode="2" />
+		<Option compiler="gfortran" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/MPMD_with_Coarray_Fortran" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gfortran" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/F95ADT_with_Coarrays" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gfortran" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="Main.f90" />
+		<Unit filename="Main_Sub.f90" />
+		<Unit filename="OOOEerro_admError.f90" />
+		<Unit filename="OOOGglob_Globals.f90" />
+		<Unit filename="OOOPimma_admImageManager.f90" />
+		<Unit filename="OOOPimmc_admImageManager_CA.f90" />
+		<Unit filename="OOOPimsc_admImageStatus_CA.f90" />
+		<Unit filename="OOOPinma_admInitialManager.f90" />
+		<Unit filename="OOOPinmc_admInitialManager_CA.f90" />
+		<Unit filename="OOOPstpa_admStartPath.f90" />
+		<Unit filename="OOOPtema_admTeamManager.f90" />
+		<Unit filename="OOOPtemc_admTeamManager_CA.f90" />
+		<Unit filename="OOOPtmec_admTeamMember_CA.f90" />
+		<Unit filename="OOOPtmem_admTeamMember.f90" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
