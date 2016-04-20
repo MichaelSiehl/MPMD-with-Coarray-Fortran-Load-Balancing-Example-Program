@@ -1,0 +1,36 @@
+The Structure of our Coarray Wrapper Modules
+============================================
+
+Every purely local (non-coarray) ADT module that requires remote communication, gets its own coarray wrapper ADT module with name ending '_CA'. The last letter of the ADT name abbreviation turns into 'c'.
+
+The following explanations are a brief overview.
+
+Derived Data Type Definition
+The derived data type definitions of our coarray wrapper modules are mainly just a clone from their corresponding purely local ADT modules, at least for those object members that are required for remote communication. (That's not always true in our example program, since we did shorten the code to make it easier to survey). Their names are ending with a '_CA' and we use them to declare all our coarrays. 
+(We also use these derived data type definitions to declare purely local (non-coarray) objects from it, in cases where we want to use a remote communication channel between two (or more) purely local objects of same type on distinct images. Such a case is possibly not shown in our example program, since we do focus on MPMD, but it is one reason for the current design of our coarray wrappers, namely its (empty) 'Local ADT Routines' sections. See below for a rationale.)
+
+Corresponding Coarray Declaration
+In order to allow easy access to corresponding coarrays, and thus to the remote communication channels, through USE association, we declare all our coarrays in the specification part of our coarray wrappers and call it 'Corresponding Coarray Declaration'.
+
+Local ADT Routines
+As mentioned above, the derived data type definitions of our coarray wrappers may also be used to declare purely local (non-coarray) objects in cases where we want to establish a remote communication channel between two purely local objects of same type on distinct images. (That's not shown in our example program since we do focus on MPMD and thus communication with a different type on a remote image. Therefore, the 'Local ADT Routines' sections are emtpy in our example program.)
+The advantage of using such purely local (non-coarray) declarations, instead of directly using the coarray declarations (though an USE statement), is that they provide another layer and thus allow to avoid any direct use of coarrays within our program logic code. That leads to a clean remote interface for our purely local ADT modules but works only for remote communication between purely local objects of same type. 
+(These local ADT routines did also prove to be helpful when using derived type coarrays with allocatable components.)
+
+Coarray ADT Routines
+The names of our 'Coarray ADT Routines' do end with _CA. This code section does consist of two parts mainly: 
+(a) access routines for the coarray type members (property set, property get) and 
+(b) management routines for the coarray type as a whole. 
+
+(a)
+Compared to sequential programming, the access routines for the properties (property set, property get) have an extension for remote communication, the ImageNumber argument, that allows remote read (property get) and remote write (property set) for each single member, in case the actual ImageNumber argument is a remote image number.
+An additional property access routine called CopyImgToImg, short for copy-image-to-image, encapsulates three kinds of remote communication between corresponding coarrays into one single place (see its simple interface to understand):
+1. sending data from a local image to a remote image (remote write)
+2. getting data from a remote image to the local image (remote read)
+3. sending data between two remote images
+
+(b)
+The only management routine for the coarray type as a whole is routine CopyCoarrayObjImgToImg, short for copy-coarray-object-image-to-image, which also encapsulates remote write, remote read, as well as sending data between two remote images into one single place.
+
+Error Handling Routines
+Our coarray wrappers contain two routines for error handling: The general ErrorHandler subroutine is to be used for both, purely local (non coarray) and coarray objects, whereas the ImageNumberBoundError_CA function is intended to be used for coarray objects only, to check if an actual image number is valid.
