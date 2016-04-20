@@ -1,0 +1,53 @@
+Naming Conventions
+==================
+
+We use a simple but yet efficient naming convention for the public interface (methods and data declarations) of our Fortran 9x style modules. For an example take the 'OOOPimma_admImageManager.f90' source file:
+
+The leading four letters ('OOOP', capitalized) are used as placeholders for the namespace (here: P stands for the 'Parallel' namespace, other namespaces are E for 'Error Handling' and G for the 'Globals' namespace; the O's are  placeholders, meaning outer scope).
+
+The following four letters ('imma', small letters) are an unique abbreviation  (within the namespace) of the Abstract Data Type name (here: 'imma' stands for ImageManager). For our coarray wrapper ADT modules, we preserve the last letter to be a 'c'. Thus the abbreviation of the ImageManager's coarray wrapper is immc. With that, we have effectively only the leading three letters for an unique abbreviation of our Abstact Data Type names. (In the case of our imma abbreviation, it is the imm letters that must be unique).
+
+This simple naming convention already allows to easily identify the membership of every public method or public data declaration. It is also the key to bind a procedure to a specific type with Fortran 9x style. And, more importantly, it turns all our Fortran 9x style code into template code and thus is our main means for code reuse with Fortran 9x. (Nevertheless, our aim here is to show MPMD with Coarray Fortran, thus we did shorten the source code massively. Therefore, it possibly can't be used as template code directly.)
+
+The '_adm' abbreviation is short for Abstract Data Type Module and thus identifies the .f90 source code file to embrace an Abstract Data Type (ADT).
+
+Routinely, we massively indent error handling and tracing related code, to improve the readability of our program logic code. Our error handling related code starts from column 65.
+
+
+
+
+
+Our further source code naming conventions and abbreviations are:
+=================================================================
+
+  for scalar members:
+                             m: ADT member
+                             S: property set, G: property get,
+                             CopyImgToImg: copy an ADT member image to image
+  for array members:
+                             A: array
+                             mA: ADT array member
+                             SA: set array property, GA: get array property,
+                             CopyAImgToImg: copy an ADT array member image to image
+
+  for elements of array members:
+                             SAElement: set only one array element property
+                             GAElement: get only one array element property
+                             CopyAElementImgToImg: copy only one element of an ADT array member image to image
+
+                             99: signals a static array member which has an upper array bound
+                                 larger than necessary; the upper bound is given by a global parameter
+
+  other naming conventions:
+                             _CA: coarray routine / coarray declaration
+                             _SYNC_: synchronization routine
+                             CopyCoarrayObjImgToImg: copy a coarray ADT object image to image
+                             CopyCoarrayObjFromImg: copy a coarray ADT object from a remote image to
+                                                    the executing image
+
+                             DC: deep copy routine
+                             Enum: enumeration
+
+                             OO: public (outer) scope (the two leading namespace letters)
+                             II: private (inner) scope
+                             UU: sub-object, object declaration of a nested type
