@@ -1,0 +1,20 @@
+The Structure of our Purely Local (Non-Coarray) ADT Modules
+===========================================================
+
+Our purely local (non-coarray) ADT modules are basically not much different from what we use with sequential programming. Nevertheless, there are some additions to handle parallel programming:
+
+USE statement for the coarray wrapper
+Every purely local (non-coarray) ADT that requires remote communication gets its own coarray wrapper ADT module, associated by a USE statement in the purely local module header.
+
+Corresponding Local Object Declaration
+Due to our programming style (i.e. encapsulate all access to coarrays into wrapper objects), it happens that the concept of coarray correspondence does extend to certain of our purely local (non coarray) declarations. We call these 'corresponding local object declarations' and declare them (according to their coarray counterparts) in the specification part of our local ADT modules. Nevertheless, these are not used in our example program since they are not much useful within our MPMD-like example program.
+
+Accessing Corresponding Coarrays
+We access corresponding coarrays by USE association exclusively.
+To establish a remote communication channel between two purely local objects of same type on distinct images, all we need is the USE statement for the type's coarray wrapper at the header of that purely local ADT module. Then, to access that remote communication channel, we may use the corresponding local object declaration together with the local ADT routines of the coarray wrapper. That is not shown in our example program since we focus on MPMD.
+Instead, because we frequently need to establish a remote communication channel between purely local (non-coarray) objects of different type within our MPMD-like programming, we place an USE statement for the remote types coarray wrapper wherever we need the remote communication channel, and directly use its declared (public) coarray together with its _CA routines. For an example see the IIinma_ActivateTeamManagerImage subroutine within the OOOPinma_admInitialManager.f90 module: To access a remote image it uses the coarray wrappers of the ImageManager (immc) and ImageStatus (imsc) types and then calls methods of these coarray wrappers to access the remote types PGAS memory.
+
+Synchronization Routines
+Our synchronization routines are marked with a '_SYNC_' naming convention.
+The use of purely local (non-coarray) ADT modules does allow a sequential-like programming style, even for the parallel logic code. That is also true for our synchronization routines. Nevertheless, these synchronization routines are still the 'parallel heart' of our purely local ADT modules and therefore do require a certain degree of 'parallel thinking' while coding them, even if the synchronizations are coded as being between (remote) objects instead of being between images.
+A simple example is our IIimma_SYNC_CheckActivityFlag synchronization routine of the ImageManager object: Every synchronization routine requires one or more counterpart routines on a distinct image (in our case: within a remote object). For the ImageManager's IIimma_SYNC_CheckActivityFlag synchronization routine, we already have two counterpart routines: The IIinma_ActivateTeamManagerImage routine of the InitalManager object, and the IItema_ActivateTeamMemberImage routine of the TeamManager object. The Use Case explains how these work in conjunction.
