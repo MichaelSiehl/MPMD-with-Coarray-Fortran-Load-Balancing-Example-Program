@@ -1,0 +1,27 @@
+Use Case
+========
+
+The program uses 13 coarray images which it groups into 3 teams, each consisting of 4 images. The remaining image is used independently from the teams for initial management and therefore executes an InitialManager object. Within each team, one of the 4 images is required to execute a TeamManager object whereas the remaining 3 (worker) images do execute a TeamMember object. The number of teams, and thus the number of TeamManager objects, as well as the number of TeamMembers per team, is determined by text files which are provided in advance of program execution. The TeamManagers.txt file gives the number of teams, the image number where each TeamManager object shall be executed, as well as an additional file name for each team, for example TeamMembers_1.txt for the first team. Further, these TeamMembers_X.txt files give the number of TeamMember objects (and thus images) for each team, together with an image number for each of its TeamMember to execute on.
+With that, it is easy to change the number of teams as well as the size of each team, using the files. Nevertheless, if you do so, you must also adjust the number of images at runtime. (With ifort you may use the -coarray-num-images option at compile time, and with OpenCoarrays/Gfortran you use the -np option when you start program execution). If the number of coarray images does not match with what the files actually require, program execution may fail.
+More details about program execution are given in the Use Case section, below in this document.
+
+
+The following Use Case describes basically the parallel execution path of the example program:
+
+1. Initially, on all images the program starts the ImageManager [OOOPimma_Start].
+
+2. On image 1 only, the ImageManager starts the InitialManager [OOOPinma_Start]. On all other images, the ImageManager calls its [IIimma_SYNC_CheckActivityFlag] subroutine for synchronization, which initially does nothing on its image except using a do loop to check the value of an activity flag [OOOPimscG_intImageActivityFlag_CA] (the 'G' stands for property get) in its image (local) PGAS memory, which is initially set to the state [OOOPimscEnum_ImageActivityFlag % InitialWaiting].
+
+('_SYNC_' is short for synchronization routine, 'Enum' is short for enumeration, and 'II' stands for private (inner) scope, meaning the routine is not part of the public interface).
+
+3. The InitialManager (image 1 only) loads initial data for the TeamManager images [IIinma_LoadTeamManagers] from file [TeamManagers.txt] which must be provided by the user in advance.
+
+4. The InitialManager  (image 1 only) activates the TeamManager images [IIinma_ActivateTeamManagerImage] as given by the file [TeamManagers.txt]: Firstly, it sets the TeamMembersFileName-property of the (remote) ImageManager on the TeamManager's image [OOOPimmcS_chrTeamMembersFileName_CA] (the 'S' stands for property set). Then it sets the (remote) ImageActivityFlag [OOOPimmcS_intImageActivityFlag_CA] to value [OOOPimscEnum_ImageActivityFlag % TeamManager]. (Here, we use these both property set routines of the coarray wrapper to do remote writes. For an explanation see the 'The Structure of our Coarray Wrapper ADT Modules' section below.)
+
+4a. At the same time (due to parallelism), the ImageManager (on all other images, but not on image 1) still checks the value of the activity flag in its image (local) PGAS memory [IIimma_SYNC_CheckActivityFlag] (see 2.). Since that value is now set to [OOOPimscEnum_ImageActivityFlag % TeamManager] on the TeamManager images (see 4.), the ImageManager now starts the TeamManager on those Images [OOOPtema_Start].
+
+5. The TeamManagers load their TeamMembers data [IItema_LoadTeamMembers] from file [m_chrTeamMembersFileName], [TeamMembers_X.txt] (where X is the TeamManager number, but not its image number). The files must be provided by the user in advance.
+
+6.  The TeamManagers do activate their TeamMember images [IItema_ActivateTeamMemberImage] as given by file [TeamMembers_X.txt]: They set the (remote) ImageActivityFlag [OOOPimscS_intImageActivityFlag_CA] (again, the property set is used to do remote write, see 4.) to value [OOOPimscEnum_ImageActivityFlag % TeamMember].
+
+6a. At the same time, the ImageManager (on the remaining idle images) checks the value of the activity flag in its image (local) PGAS memory [IIimma_SYNC_CheckActivityFlag] (see 2.). Since that value is now set to [OOOPimscEnum_ImageActivityFlag % TeamMember] on the TeamMember images (see 6.), the ImageManagers now start the TeamMembers on those Images [OOOPtmem_Start].
