@@ -1,0 +1,28 @@
+Source Code Files Overview
+==========================
+
+Our example program consists of 14 source code files: 
+
+Main.f90    (the entry point of the application, of course)
+Main_Sub.f90    (we use that routinely to avoid program logic code in our Main.f90)
+OOOGglob_Globals.f90    (contains global definitions of parameters and some routines for tracing)
+OOOEerro_admError.f90    (a very primitive sequential error handler)
+
+purely local (non-coarray) ADT modules:
+OOOPstpa_admStartPath.f90    (to get the working directory from our start.txt file)
+OOOPimma_admImageManager.f90    (the virtual start point of our app, executed by all images)
+OOOPinma_admInitialManager.f90    (the InitialManager object, executed on image 1 only)
+OOOPtema_admTeamManager.f90    (executed only on the images of the TeamManagers.txt file)
+OOOPtmem_admTeamMember.f90    (each TeamManager starts its own set of TeamMember images as stated by its TeamMembers_X.txt file, where X is the TeamManager number)
+
+coarray wrapper ADT modules:
+OOOPimsc_admImageStatus_CA.f90    (the only standalone coarray wrapper of our application)
+OOOPimmc_admImageManager_CA.f90
+OOOPinmc_admInitialManager_CA.f90
+OOOPtemc_admTeamManager_CA.f90
+OOOPtmec_admTeamMember_CA.f90
+
+Coarray wrappers are only necessary for those purely local ADT modules that actually require remote communication. Thus the OOOPstpa_admStartPath.f90 source code file does not have a companion coarray wrapper.
+On the other hand, the OOOPimsc_admImageStatus_CA.f90 coarray wrapper is a standalone coarray wrapper (without any purely local ADT module), since it does not require any additional program logic code. Its only aim is to keep the working status of every image within its PGAS memory.
+
+Another requirement for our example program to execute is a start.txt file which contains just the path to the TeamManagers.txt and the TeamMembers_X.txt files. This path, or working directory, must be placed into quotation marks within the start.txt file, and the start.txt file itself must be placed in the execution directory of our example program. Further, due to its simplistic design, the program may only execute on shared memory machines.
