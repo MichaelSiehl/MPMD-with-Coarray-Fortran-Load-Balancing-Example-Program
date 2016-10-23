@@ -78,11 +78,11 @@ SUBROUTINE OOOGglob_subSetProcedures (chrCurrentProcedure)
   ! Error-Handling and Tracing
   CHARACTER(KIND=OOOGglob_kcha,LEN=*), INTENT(IN) :: chrCurrentProcedure
   ! refresh the Stack Trace:
-  OOOGglob_intStackTraceCounter = OOOGglob_intStackTraceCounter + 1
-  OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter) = chrCurrentProcedure
-  OOOGglob_chrCurrentProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter)
-  OOOGglob_chrCallingProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter - 1)
-  OOOGglob_chrReturningProcedure = ''
+  !OOOGglob_intStackTraceCounter = OOOGglob_intStackTraceCounter + 1
+  !OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter) = chrCurrentProcedure
+  !OOOGglob_chrCurrentProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter)
+  !OOOGglob_chrCallingProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter - 1)
+  !OOOGglob_chrReturningProcedure = ''
   !
 END SUBROUTINE OOOGglob_subSetProcedures
 !_____________
@@ -90,12 +90,12 @@ END SUBROUTINE OOOGglob_subSetProcedures
 SUBROUTINE OOOGglob_subResetProcedures
   ! Error-Handling and Tracing
   ! refresh the Stack Trace:
-  OOOGglob_intStackTraceCounter = OOOGglob_intStackTraceCounter - 1
-  OOOGglob_chrCurrentProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter)
-  OOOGglob_chrReturningProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter + 1)
-  IF (OOOGglob_intStackTraceCounter > 1) THEN
-    OOOGglob_chrCallingProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter - 1)
-  END IF
+  !OOOGglob_intStackTraceCounter = OOOGglob_intStackTraceCounter - 1
+  !OOOGglob_chrCurrentProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter)
+  !OOOGglob_chrReturningProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter + 1)
+  !IF (OOOGglob_intStackTraceCounter > 1) THEN
+  !  OOOGglob_chrCallingProcedure = OOOGglob_chrStackTrace (OOOGglob_intStackTraceCounter - 1)
+  !END IF
   !
 END SUBROUTINE OOOGglob_subResetProcedures
 !__________________________________________________________
