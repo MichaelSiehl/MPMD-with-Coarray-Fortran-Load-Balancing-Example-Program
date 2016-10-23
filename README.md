@@ -12,4 +12,7 @@ The example program is still very primitive. Nevertheless, using such a coding s
 
 The example program was derived from our original 'MPMD with Fortran 2008 Coarrays' example program: https://github.com/MichaelSiehl/MPMD-with-Fortran-2008-Coarrays. For a brief description of the modifications see our short paper 'MPMD with Coarray Fortran (PGAS): Load Balancing – Example Program' (pdf format) in the Repositorys main folder or at http://www.mpmd-with-coarray-fortran.de/MPMD_Load_Balancing_example.pdf.
 
-Most of the files herein were firstly published on the website www.mpmd-with-coarray-fortran.de. 
+# Important Update (16/10/23)
+Please be aware that the original source code in the 'src' folder is not conforming with the Fortran (2008/2015) standard since it does not use any Fortran (2008) means for the synchronizations (between coarray images) in the MPMD-style part of the source codes.<br />
+I just added a new source code folder 'src_atomic_version', containing a very similar example program which does utilize Fortran 2008 SYNC MEMORY and atomic subroutines. Within that new version of the example program the SYNC MEMORY statements do form user-defined unordered execution segments (see Modern Fortran explained, 2011, Appendix B.10.1 for a brief description). To compile that code you may need a more recent Fortran compiler since the code uses scalar integer components of derived type coarrays together with atomic subroutines (atomic_define, atomic_ref) (ifort 15 did not support this, while ifort 17 as well as gfortran7/OpenCoarrays do support it).<br />
+Compared to the original src version, the source code of the new src_atomic_version contains only very few changes which are marked with '160904' and '160907' comments (time stamps).
