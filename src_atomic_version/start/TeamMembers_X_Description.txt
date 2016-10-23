@@ -1,0 +1,14 @@
+Description of the TeamMembers_X.txt file
+
+Each Team Manager requires it's own TeamMembers_X.txt file.
+
+- The first row contains just the number of Team Members for that Team Manager.
+
+- The second row contains the image numbers where the Team Members will be executed.
+
+
+example:
+
+3
+7,8,9
+

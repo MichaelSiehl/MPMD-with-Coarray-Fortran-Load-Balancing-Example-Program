@@ -1,0 +1,8 @@
+Description of the ImageStatusManager.txt file
+
+- The file consists of only one row, containing just the image number where the ImageStatusManager will be executed.
+
+
+example:
+
+2
